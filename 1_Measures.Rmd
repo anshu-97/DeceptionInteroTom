@@ -248,6 +248,89 @@ p1 / p2 / p3
 ```
 
 
+## Reliability and Validity
+
+### Lie Scale
+```{r message= FALSE, warning=FALSE}
+df<- read.csv('preprocessing/lie_processed.csv')
+data.frame(Lie_Ability = 
+               performance::cronbachs_alpha(
+                   dplyr::select(df, Q4, Q5, Q6, Q7)),
+           Lie_Negativity =
+               performance::cronbachs_alpha(
+                   dplyr::select(df, Q9, Q11, Q13, Q16,)),
+           Lie_Frequency = 
+               performance::cronbachs_alpha(
+                    dplyr::select(df, Q1,Q2, Q3, Q8)),
+           Lie_Contextuality = 
+               performance::cronbachs_alpha(
+                    dplyr::select(df, Q10, Q12, Q14, Q15)))
+
+r<- correlation(select(df, LIE_Ability, LIE_Negativity, LIE_Frequency, LIE_Contextuality), p_adjust="none")
+summary(r)|>
+    plot()
+
+```
+
+### MAIA 
+```{r message= FALSE, warning=FALSE}
+df<- read.csv('preprocessing/MAIA2_processed.csv')
+data.frame(MAIA_Noticing = 
+               performance::cronbachs_alpha(
+                   dplyr::select(df, Q1, Q2, Q3, Q4)),
+           MAIA_NotDistracting =
+               performance::cronbachs_alpha(
+                   dplyr::select(df, Q5, Q6, Q7, Q8, Q9, Q10)),
+           MAIA_NotWorrying = 
+               performance::cronbachs_alpha(
+                    dplyr::select(df, Q11,Q12, Q13, Q14, Q15)),
+           MAIA_AttentionRegulation = 
+               performance::cronbachs_alpha(
+                    dplyr::select(df, Q16, Q17, Q18, Q19, Q20, Q21, Q22)),
+           MAIA_EmotionalAwarness= 
+               performance::cronbachs_alpha(
+                   dplyr::select(df, Q23,Q24, Q25, Q26, Q27)),
+           MAIA_SelfRegulation =
+               performance::cronbachs_alpha(
+                   dplyr::select(df, Q28, Q29, Q30, Q31)),
+           MAIA_BodyListening = 
+               performance::cronbachs_alpha(
+                   dplyr::select(df, Q32, Q33, Q34)),
+           MAIA_Trusting = 
+               performance::cronbachs_alpha(
+                   dplyr::select(df, Q35, Q36, Q37)
+               ))
+
+r<- correlation(select(df, starts_with('MAIA_')), p_adjust = "none")
+summary(r)|>
+    plot()
+
+```
+
+### BES
+```{r message= FALSE, warning=FALSE}
+df<- read.csv('preprocessing/BES_processed.csv')
+data.frame(
+    BES_Cognitve = 
+        performance::cronbachs_alpha(
+           dplyr::select(df, Q3, Q6, Q9, Q10, Q12, Q14, Q16, Q19, Q20)),
+    BES_Affective =
+        performance::cronbachs_alpha(
+           dplyr::select(df, Q1, Q2, Q4, Q5, Q7, Q8, Q11, Q13, Q15, Q17, Q18)),
+    BES_Total = performance::cronbachs_alpha(df)
+        )
+
+r_cog<- correlation(select(df, Q3, Q6, Q9, Q10, Q12, Q14, Q16, Q19, Q20, BES_Cognitive ), p_adjust="none")
+r_aff<-correlation(select(df,  Q1, Q2, Q4, Q5, Q7, Q8, Q11, Q13, Q15, Q17, Q18, BES_Affective), p_adjust="none")
+
+summary(r_cog)|>
+    plot()
+
+summary(r_aff)|>
+    plot()
+
+```
+
 ## Inter-Measures Correlation {.tabset}
 
 ```{r message=FALSE, warning=FALSE}
